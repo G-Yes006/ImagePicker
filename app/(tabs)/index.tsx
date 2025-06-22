@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import { useRef, useState } from 'react';
-import { ImageSourcePropType, Platform, StyleSheet, View } from 'react-native';
+import { ImageSourcePropType, Platform, StyleSheet, Text, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { captureRef } from 'react-native-view-shot';
 
@@ -12,6 +12,8 @@ import EmojiPicker from '@/components/EmojiPicker';
 import EmojiSticker from '@/components/EmojiSticker';
 import IconButton from '@/components/IconButton';
 import ImageViewer from '@/components/ImageViewer';
+import { colors } from '@/theme/colors';
+import { spacing } from '@/theme/spacing';
 
 const PlaceholderImage = require('@/assets/images/background-image.png');
 
@@ -25,6 +27,7 @@ export default function Index() {
     ImageSourcePropType | undefined
   >(undefined);
   const [status, requestPermission] = MediaLibrary.usePermissions();
+  const [feedback, setFeedback] = useState<string | null>(null);
   const imageRef = useRef<View>(null);
 
   if (status === null) {
@@ -41,8 +44,9 @@ export default function Index() {
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
       setShowAppOptions(true);
+      setFeedback(null);
     } else {
-      alert('You did not select any image.');
+      setFeedback('You did not select any image.');
     }
   };
 
@@ -114,6 +118,11 @@ export default function Index() {
           />
         </View>
       )}
+      {feedback && (
+        <View style={styles.feedbackContainer}>
+          <Text style={styles.feedbackText}>{feedback}</Text>
+        </View>
+      )}
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
         <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose} />
       </EmojiPicker>
@@ -124,7 +133,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#25292e',
+    backgroundColor: colors.background,
     alignItems: 'center',
   },
   imageContainer: {
@@ -136,10 +145,29 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     position: 'absolute',
-    bottom: 80,
+        bottom: 10,
   },
   optionsRow: {
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  feedbackContainer: {
+    position: 'absolute',
+    top: 60,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  feedbackText: {
+    backgroundColor: colors.primary,
+    color: colors.textDark,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.xxl,
+    borderRadius: spacing.lg,
+    fontSize: 16,
+    fontWeight: 'bold',
+    overflow: 'hidden',
+    elevation: 2,
   },
 });

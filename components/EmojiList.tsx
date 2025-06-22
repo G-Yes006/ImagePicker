@@ -1,12 +1,12 @@
+import { Image } from 'expo-image';
 import { useState } from 'react';
 import {
-  ImageSourcePropType,
-  StyleSheet,
   FlatList,
+  ImageSourcePropType,
   Platform,
   Pressable,
 } from 'react-native';
-import { Image } from 'expo-image';
+import { styles } from './EmojiList.styles';
 
 type Props = {
   onSelect: (image: ImageSourcePropType) => void;
@@ -42,19 +42,3 @@ export default function EmojiList({ onSelect, onCloseModal }: Props) {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  listContainer: {
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginRight: 20,
-  },
-});

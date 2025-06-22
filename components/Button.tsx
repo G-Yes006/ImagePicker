@@ -1,5 +1,8 @@
-import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { colors } from '@/theme/colors';
+import { spacing } from '@/theme/spacing';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Pressable, Text, View } from 'react-native';
+import { styles } from './Button.styles';
 
 type Props = {
   label: string;
@@ -13,20 +16,20 @@ export default function Button({ label, theme, onPress }: Props) {
       <View
         style={[
           styles.buttonContainer,
-          { borderWidth: 4, borderColor: '#ffd33d', borderRadius: 18 },
+          { borderWidth: 4, borderColor: colors.primary, borderRadius: spacing.xl },
         ]}
       >
         <Pressable
-          style={[styles.button, { backgroundColor: '#fff' }]}
+          style={[styles.button, { backgroundColor: colors.accent }]}
           onPress={onPress}
         >
           <FontAwesome
             name="picture-o"
             size={18}
-            color="#25292e"
+            color={colors.textDark}
             style={styles.buttonIcon}
           />
-          <Text style={[styles.buttonLabel, { color: '#25292e' }]}>
+          <Text style={[styles.buttonLabel, { color: colors.textDark }]}>
             {label}
           </Text>
         </Pressable>
@@ -42,29 +45,3 @@ export default function Button({ label, theme, onPress }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  buttonContainer: {
-    width: 320,
-    height: 68,
-    marginHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 3,
-  },
-  button: {
-    borderRadius: 10,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  buttonIcon: {
-    paddingRight: 8,
-  },
-  buttonLabel: {
-    color: '#fff',
-    fontSize: 16,
-  },
-});
