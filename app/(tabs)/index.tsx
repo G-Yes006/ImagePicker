@@ -1,4 +1,3 @@
-import domtoimage from 'dom-to-image';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import { useRef, useState } from 'react';
@@ -17,10 +16,14 @@ import ImageViewer from '@/components/ImageViewer';
 const PlaceholderImage = require('@/assets/images/background-image.png');
 
 export default function Index() {
-  const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
+  const [selectedImage, setSelectedImage] = useState<string | undefined>(
+    undefined,
+  );
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [pickedEmoji, setPickedEmoji] = useState<ImageSourcePropType | undefined>(undefined);
+  const [pickedEmoji, setPickedEmoji] = useState<
+    ImageSourcePropType | undefined
+  >(undefined);
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const imageRef = useRef<View>(null);
 
@@ -70,21 +73,6 @@ export default function Index() {
       } catch (e) {
         console.log(e);
       }
-    } else {
-      try {
-        const dataUrl = await domtoimage.toJpeg(imageRef.current, {
-          quality: 0.95,
-          width: 320,
-          height: 440,
-        });
-
-        let link = document.createElement('a');
-        link.download = 'sticker-smash.jpeg';
-        link.href = dataUrl;
-        link.click();
-      } catch (e) {
-        console.log(e);
-      }
     }
   };
 
@@ -92,8 +80,13 @@ export default function Index() {
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.imageContainer}>
         <View ref={imageRef} collapsable={false}>
-          <ImageViewer imgSource={PlaceholderImage} selectedImage={selectedImage} />
-          {pickedEmoji && <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />}
+          <ImageViewer
+            imgSource={PlaceholderImage}
+            selectedImage={selectedImage}
+          />
+          {pickedEmoji && (
+            <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />
+          )}
         </View>
       </View>
       {showAppOptions ? (
@@ -101,13 +94,24 @@ export default function Index() {
           <View style={styles.optionsRow}>
             <IconButton icon="refresh" label="Reset" onPress={onReset} />
             <CircleButton onPress={onAddSticker} />
-            <IconButton icon="save-alt" label="Save" onPress={onSaveImageAsync} />
+            <IconButton
+              icon="save-alt"
+              label="Save"
+              onPress={onSaveImageAsync}
+            />
           </View>
         </View>
       ) : (
         <View style={styles.footerContainer}>
-          <Button theme="primary" label="Choose a photo" onPress={pickImageAsync} />
-          <Button label="Use this photo" onPress={() => setShowAppOptions(true)} />
+          <Button
+            theme="primary"
+            label="Choose a photo"
+            onPress={pickImageAsync}
+          />
+          <Button
+            label="Use this photo"
+            onPress={() => setShowAppOptions(true)}
+          />
         </View>
       )}
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
